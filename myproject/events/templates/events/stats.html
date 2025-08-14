@@ -1,0 +1,40 @@
+{% extends "events/base.html" %}
+
+{% block content %}
+<h1>Statistics</h1>
+
+<div class="row mb-4">
+  <div class="col-md-3">
+    <div class="card p-3 text-center">
+      Total events: <strong>{{ total_events }}</strong>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card p-3 text-center">
+      Total registrations: <strong>{{ total_regs }}</strong>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card p-3 text-center">
+      Upcoming events: <strong>{{ upcoming }}</strong>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card p-3 text-center">
+      Cancelled: <strong>{{ cancelled }}</strong>
+    </div>
+  </div>
+</div>
+
+<h3 class="mt-4">Top events by registrations</h3>
+<ul class="list-group">
+  {% for e in top_events %}
+    <li class="list-group-item">
+      {{ e.name }} — {{ e.reg_count }} registrations — seats left: {{ e.seats_left }}
+    </li>
+  {% empty %}
+    <li class="list-group-item">No data.</li>
+  {% endfor %}
+</ul>
+{% endblock %}
+

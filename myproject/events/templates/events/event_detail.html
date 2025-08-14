@@ -1,0 +1,52 @@
+{% extends "events/base.html" %}
+{% block content %}
+<div class="row">
+  <div class="col-md-8">
+    <h2>{{ event.name }} {% if event.cancelled %}<span class="badge bg-danger">Cancelled</span>{% endif %}</h2>
+    <p><strong>Date:</strong> {{ event.start_time|date:"Y-m-d H:i" }} • <strong>Location:</strong> {{ event.location }}</p>
+    <p>{{ event.description }}</p>
+    <p><strong>Capacity:</strong> {{ event.capacity }} • <strong>Registered:</strong> {{ event.registrations_count }} • <strong>Seats left:</strong> {{ event.seats_left }}</p>
+
+    <h4>Registrations</h4>
+    <ul class="list-group mb-3">
+      {% for r in registrations %}
+        <li class="list-group-item">{{ r.full_name }} — {{ r.email }} <small class="text-muted">({{ r.created_at|date:"Y-m-d H:i" }})</small></li>
+      {% empty %}
+        <li class="list-group-item">No registrations yet.</li>
+      {% endfor %}
+    </ul>
+
+    <a href="{% url 'events:cancel' event.pk %}" class="btn btn-warning">
+      {% if event.cancelled %}Reactivate Event{% else %}Cancel Event{% endif %}
+    </a>
+    <a href="{% url 'events:list' %}" class="btn btn-secondary">Back to list</a>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Register for this event</h5>
+        {% if event.cancelled %}
+          <div class="alert alert-danger">This event is cancelled. Registrations are closed.</div>
+        {% elif event.seats_left == 0 %}
+          <div class="alert alert-warning">Event is full.</div>
+        {% else %}
+          <form method="post" action="{% url 'events:register' event.pk %}">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="mb-2">
+              {{ form.full_name.label_tag }} {{ form.full_name }}
+              {% for err in form.full_name.errors %}<div class="text-danger">{{ err }}</div>{% endfor %}
+            </div>
+            <div class="mb-2">
+              {{ form.email.label_tag }} {{ form.email }}
+              {% for err in form.email.errors %}<div class="text-danger">{{ err }}</div>{% endfor %}
+            </div>
+            <button class="btn btn-primary" type="submit">Register</button>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
