@@ -30,7 +30,7 @@
 <ul class="list-group">
   {% for e in top_events %}
     <li class="list-group-item">
-      {{ e.name }} — {{ e.reg_count }} registrations — seats left: {{ e.seats_left }}
+      {{ e.name }} — {{ e.reg_count }} registrations — seats left: {{ e.seats_left_calc }}
     </li>
   {% empty %}
     <li class="list-group-item">No data.</li>
