@@ -105,7 +105,7 @@ def stats_view(request):
     top_events = (
         Event.objects.annotate(
             reg_count=Count('registrations'),
-            seats_left=F('capacity') - Count('registrations')
+            seats_left_calc=F('capacity') - Count('registrations')
         )
         .order_by('-reg_count')[:10]
     )
